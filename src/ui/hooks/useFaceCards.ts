@@ -17,7 +17,7 @@ export const useFaceCards = (categoryId?: string) => {
     };
 
     fetchData();
-  }, [categoryId]);  // categoryId 变化时触发 useEffect
+  }, [categoryId]); // categoryId 变化时触发 useEffect
 
   return { cards, isLoading };
 };
@@ -26,6 +26,27 @@ const MOCK_CARDS: FaceCard[] = [
   // 示例数据...
   {
     id: "1",
+    name: "张国荣",
+    thumbnail: "/src/ui/assets/zgr.jpg",
+    videosCount: 1,
+    lastUpdated: "2020-01-02",
+  },
+  {
+    id: "2",
+    name: "张国荣",
+    thumbnail: "/src/ui/assets/zgr.jpg",
+    videosCount: 1,
+    lastUpdated: "2020-01-02",
+  },
+  {
+    id: "3",
+    name: "张国荣",
+    thumbnail: "/src/ui/assets/zgr.jpg",
+    videosCount: 1,
+    lastUpdated: "2020-01-02",
+  },
+  {
+    id: "4",
     name: "张国荣",
     thumbnail: "/src/ui/assets/zgr.jpg",
     videosCount: 1,

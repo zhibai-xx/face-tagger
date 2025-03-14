@@ -16,13 +16,18 @@ electron.contextBridge.exposeInMainWorld("electron", {
   getStaticData: () => ipcInvoke("getStaticData"),
   // 使用 ipcSend 发送 sendFrameAction 事件和相关的有效载荷（payload）
   sendFrameAction: (payload) => ipcSend("sendFrameAction", payload),
+  // ✅ 获取本地视频列表
+  getVideoList: (folderPath: string) => ipcInvoke("getVideoList", folderPath),
+  openVideo: (filePath: string) => ipcSend("openVideo", filePath),
 } satisfies Window["electron"]);
 
 // 向主进程发送请求并等待响应
 function ipcInvoke<Key extends keyof EventPayloadMapping>(
-  key: Key
+  key: Key,
+  ...args: any[]
 ): Promise<EventPayloadMapping[Key]> {
-  return electron.ipcRenderer.invoke(key);
+  console.log(...args, '----->ipcInvoke');
+  return electron.ipcRenderer.invoke(key, ...args);
 }
 
 // 注册一个事件监听器以接收来自主进程的消息

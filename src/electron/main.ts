@@ -1,13 +1,22 @@
 import { app, BrowserWindow } from "electron";
 import { ipcMainHandle, ipcMainOn, isDev } from "./util.js";
-import { getStaticData, pollResources } from "./resourceManager.js";
+import {
+  getStaticData,
+  pollResources,
+  getVideoList,
+  openVideo,
+} from "./resourceManager.js";
 import { getPreloadPath, getUIPath } from "./pathResolver.js";
 // import { createTray } from './tray.js';
 // import { createMenu } from './menu.js';
 
 app.on("ready", () => {
   const mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
     webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: false, // 避免安全问题
       preload: getPreloadPath(),
     },
     // disables default system frame (dont do this if you want a proper working menu bar)
@@ -23,6 +32,13 @@ app.on("ready", () => {
 
   ipcMainHandle("getStaticData", () => {
     return getStaticData();
+  });
+  ipcMainHandle("getVideoList", (folderPath) => {
+    return getVideoList(folderPath);
+  });
+
+  ipcMainOn("openVideo", (payload) => {
+    openVideo(payload);
   });
 
   ipcMainOn("sendFrameAction", (payload) => {

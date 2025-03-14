@@ -5,17 +5,17 @@ import { pathToFileURL } from "url";
 export function isDev(): boolean {
   return process.env.NODE_ENV === "development";
 }
-// 监听 ipcMain.handle() 事件，用于处理渲染进程的异步请求
+// 监听 ipcMain.handle() 事件，用于处理渲染进程的异步请求，并返回一个 Promise，它通常用于请求数据的场景。
 export function ipcMainHandle<Key extends keyof EventPayloadMapping>(
   key: Key,
-  handler: () => EventPayloadMapping[Key]
+  handler: (args: string) => EventPayloadMapping[Key]
 ) {
-  ipcMain.handle(key, async (event) => {
+  ipcMain.handle(key, async (event, args) => {
     // validateEventFrame(event.senderFrame);
     // return handler();
     try {
       validateEventFrame(event.senderFrame);
-      return await handler();
+      return await handler(args);
     } catch (error) {
       const errorMessage = (error as Error).message || "Unknown error occurred";
       console.error("IPC Handle Error:", error);
@@ -23,7 +23,7 @@ export function ipcMainHandle<Key extends keyof EventPayloadMapping>(
     }
   });
 }
-// 监听 ipcMain.on() 事件，用于处理渲染进程的同步消息
+// 监听 ipcMain.on() 事件，用于处理渲染进程的同步消息，不返回 Promise。通常用于不需要返回结果的事件，例如点击事件。
 export function ipcMainOn<Key extends keyof EventPayloadMapping>(
   key: Key,
   handler: (payload: EventPayloadMapping[Key]) => void

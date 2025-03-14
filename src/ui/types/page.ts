@@ -11,3 +11,9 @@ export type FaceCard = {
   videosCount: number;
   lastUpdated: string;
 };
+
+export type VideoList = {
+  name: string;
+  thumbnail: string;
+  path: string;
+};

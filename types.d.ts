@@ -10,6 +10,12 @@ type StaticData = {
   totalMemoryGB: number;
 };
 
+type VideoList = {
+  name: string;
+  path: string;
+  thumbnail: string;
+};
+
 type View = "CPU" | "RAM" | "STORAGE";
 
 type FrameWindowAction = "CLOSE" | "MAXIMIZE" | "MINIMIZE";
@@ -19,6 +25,8 @@ type EventPayloadMapping = {
   getStaticData: StaticData;
   changeView: View;
   sendFrameAction: FrameWindowAction;
+  getVideoList: VideoList[];
+  openVideo: string;
 };
 
 type UnsubscribeFunction = () => void;
@@ -33,5 +41,7 @@ interface Window {
       callback: (view: View) => void
     ) => UnsubscribeFunction;
     sendFrameAction: (payload: FrameWindowAction) => void;
+    getVideoList: (folderPath: string) => Promise<VideoList[]>;
+    openVideo: (filePath: string) => void;
   };
 }
